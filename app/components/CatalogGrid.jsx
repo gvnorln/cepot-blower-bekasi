@@ -3,7 +3,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 
-export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE }) {
+export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE, addToCart }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [sortBy, setSortBy] = useState("cheapest");
   const [loading, setLoading] = useState(false);
@@ -138,7 +138,12 @@ export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
             {pagedItems.map((p) => (
               <div key={p.id} className="break-inside-avoid mb-4">
-                <ProductCard p={p} setSelected={setSelected} openWhatsApp={openWhatsApp} />
+                <ProductCard 
+                  p={p} 
+                  setSelected={setSelected} 
+                  openWhatsApp={openWhatsApp} 
+                  addToCart={addToCart} 
+                />
               </div>
             ))}
           </div>
