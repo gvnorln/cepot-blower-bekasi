@@ -10,10 +10,26 @@ export default function Header({ WHATSAPP_PHONE }) {
   const menuItems = [
     { name: "Home", href: "/" },
     { name: "Catalog", href: "#catalog" },
-    { name: "Gallery", href: "/gallery", isRoute: true }, // pindah halaman
+    { name: "Gallery", href: "/gallery", isRoute: true },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
   ];
+
+  // Template pesan WA
+  const waTemplate = `
+Halo, saya ingin memesan produk dari Cepot Blower Bekasi.
+
+Nama: 
+Produk: 
+Jumlah: 
+Alamat: 
+Catatan: 
+`;
+
+  const handleWA = () => {
+    const link = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(waTemplate)}`;
+    window.open(link, "_blank");
+  };
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 font-sans">
@@ -61,14 +77,12 @@ export default function Header({ WHATSAPP_PHONE }) {
               </a>
             )
           )}
-          <a
-            href={`https://wa.me/${WHATSAPP_PHONE}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleWA}
             className="ml-4 inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full shadow-md font-medium text-sm transition duration-150"
           >
             WhatsApp
-          </a>
+          </button>
         </nav>
 
         {/* Mobile Hamburger */}
@@ -87,7 +101,6 @@ export default function Header({ WHATSAPP_PHONE }) {
         className={`fixed top-0 right-0 h-full w-72 bg-white/80 backdrop-blur-md shadow-xl transform transition-transform duration-300 z-50
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        {/* Header menu */}
         <div className="flex items-center justify-between p-5 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">Menu</h2>
           <button
@@ -98,7 +111,6 @@ export default function Header({ WHATSAPP_PHONE }) {
           </button>
         </div>
 
-        {/* Menu items */}
         <nav className="flex flex-col gap-6 mt-6 px-5">
           {menuItems.map((item) =>
             item.isRoute ? (
@@ -122,14 +134,12 @@ export default function Header({ WHATSAPP_PHONE }) {
             )
           )}
 
-          <a
-            href={`https://wa.me/${WHATSAPP_PHONE}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleWA}
             className="mt-6 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-full shadow-md font-medium text-base transition duration-150"
           >
             WhatsApp
-          </a>
+          </button>
         </nav>
       </div>
 

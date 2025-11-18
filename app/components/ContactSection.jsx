@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 export default function ContactSection({ WHATSAPP_PHONE }) {
   const socials = [
@@ -8,12 +8,28 @@ export default function ContactSection({ WHATSAPP_PHONE }) {
     { name: "Facebook", icon: "📘", handle: "@cepot_blowerbekasi", link: "https://facebook.com/cepot_blowerbekasi" },
   ];
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleWhatsApp = () => {
+    const template = `
+Halo, saya ingin memesan produk dari Cepot Blower Bekasi.
+
+Nama: ${name}
+Email: ${email}
+Pesan: ${message}
+`;
+    const link = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(template)}`;
+    window.open(link, "_blank");
+  };
+
   return (
     <section id="contact" className="mt-10 bg-gray-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
 
         {/* Kontak & Socials */}
-        <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col justify-between gap-6">
+        <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-6">
           <div>
             <h4 className="text-2xl font-bold text-gray-800 mb-2">Kontak Kami</h4>
             <p className="text-gray-600 mb-4 text-sm">
@@ -21,14 +37,12 @@ export default function ContactSection({ WHATSAPP_PHONE }) {
             </p>
 
             {/* WhatsApp Button */}
-            <a
-              href={`https://wa.me/${WHATSAPP_PHONE}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={handleWhatsApp}
               className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 transition-colors text-white font-medium px-6 py-3 rounded-lg shadow-md"
             >
               <span className="text-xl">💬</span> Chat WhatsApp
-            </a>
+            </button>
 
             {/* Social Media */}
             <div className="mt-6">
@@ -57,33 +71,41 @@ export default function ContactSection({ WHATSAPP_PHONE }) {
         </div>
 
         {/* Form Kirim Pesan */}
-        <form className="bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-4">
+        <div className="bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-4">
           <h4 className="text-2xl font-bold text-gray-800 mb-4">Kirim Pesan</h4>
 
           <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none transition text-sm"
             placeholder="Nama"
             required
           />
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none transition text-sm"
             placeholder="Email"
             required
           />
           <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             className="border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none transition resize-none text-sm"
             rows={5}
             placeholder="Pesan..."
             required
           />
+
+          {/* Tombol WhatsApp */}
           <button
-            type="submit"
-            className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
+            onClick={handleWhatsApp}
+            className="mt-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
           >
-            Kirim
+            Kirim via WhatsApp
           </button>
-        </form>
+        </div>
       </div>
 
       {/* Footer */}
