@@ -12,7 +12,7 @@ import AboutSection from "./components/AboutSection";
 import ContactSection from "./components/ContactSection";
 import FloatingWA from "./components/FloatingWA";
 
-const WHATSAPP_PHONE = "6281234567890";
+const WHATSAPP_PHONE = "6281298229660";
 
 export default function Page() {
   const [query, setQuery] = useState("");
