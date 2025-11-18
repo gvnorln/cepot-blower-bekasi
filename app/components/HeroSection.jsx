@@ -29,12 +29,31 @@ export default function HeroSection({
   return (
     <>
       {/* BANNER IMAGE */}
-      <div className="w-full h-96 sm:h-[26rem] relative mb-8">
-        <img
-          src="/home.jpg"
-          alt="Banner Cepot Blower Bekasi"
-          className="w-full h-full object-cover rounded-2xl shadow-lg"
-        />
+      <div className="w-full h-96 sm:h-[26rem] relative mb-8 rounded-2xl overflow-hidden shadow-lg">
+        <picture>
+          {/* Gambar untuk HP */}
+          <source srcSet="/banner-home.png" media="(max-width: 640px)" />
+          {/* Gambar default */}
+          <img
+            src="/banner-home.png"
+            alt="Banner Cepot Blower Bekasi"
+            className="w-full h-full object-cover"
+          />
+        </picture>
+
+        {/* Overlay gelap, tapi transparan */}
+        <div className="absolute inset-0 bg-black opacity-35"></div>
+
+        {/* Teks di atas gambar */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">
+            Cepot Blower Bekasi
+          </h1>
+          <p className="text-white text-sm sm:text-lg max-w-2xl">
+            Sewa blower, AC, lighting, genset, dan perlengkapan event lainnya
+            untuk membuat acara Anda berkesan, praktis, dan nyaman.
+          </p>
+        </div>
       </div>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start mb-10 px-4 sm:px-6 lg:px-8">
