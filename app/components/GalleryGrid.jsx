@@ -37,7 +37,7 @@ export default function GalleryMasonryGlassBackground() {
       {/* Background Section */}
       <div className="absolute inset-0 z-10"></div>
 
-      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
+      <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
         Gallery Events
       </h2>
 

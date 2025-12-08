@@ -31,7 +31,10 @@ export default function Page() {
       if (category !== "all" && p.category !== category) return false;
       if (p.price > maxPrice) return false;
       if (!q) return true;
-      return p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q);
+      return (
+        p.title.toLowerCase().includes(q) ||
+        p.short.toLowerCase().includes(q)
+      );
     });
   }, [query, category, maxPrice]);
 
@@ -55,30 +58,20 @@ export default function Page() {
   };
 
   return (
-    <div
-      className="
-        min-h-screen text-gray-800 relative overflow-hidden
-        bg-gray-50
-      "
-    >
-      {/* AURA KIRI */}
-      <div
-        className="pointer-events-none absolute left-0 top-0 h-full w-[40%]
-        bg-gradient-to-r from-blue-300/30 via-purple-300/20 to-transparent
-        blur-3xl"
-      ></div>
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      
+      {/* Floating Cart */}
+      <FloatingCart
+        cart={cart}
+        setCart={setCart}
+        WHATSAPP_PHONE={WHATSAPP_PHONE}
+      />
 
-      {/* AURA KANAN */}
-      <div
-        className="pointer-events-none absolute right-0 top-0 h-full w-[40%]
-        bg-gradient-to-l from-purple-300/30 via-blue-300/20 to-transparent
-        blur-3xl"
-      ></div>
-
-      <FloatingCart cart={cart} setCart={setCart} WHATSAPP_PHONE={WHATSAPP_PHONE} />
+      {/* Fixed Navbar */}
       <HeaderHome WHATSAPP_PHONE={WHATSAPP_PHONE} />
 
-      <main className="max-w-6xl mx-auto px-4 py-8 relative z-10">
+      {/* MAIN CONTENT — Added padding to avoid overlap */}
+      <main className="max-w-6xl mx-auto px-4 py-8 pt-[95px]">
         <HeroSection
           query={query}
           setQuery={setQuery}
@@ -106,11 +99,11 @@ export default function Page() {
         )}
 
         <GalleryGrid />
-
         <AboutSection />
         <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />
       </main>
 
+      {/* Floating WhatsApp */}
       <FloatingWA WHATSAPP_PHONE={WHATSAPP_PHONE} />
     </div>
   );
