@@ -179,47 +179,72 @@ export default function HeroSection() {
           {/* SERVICES (REDESIGNED) */}
           <div className="md:col-span-1 flex flex-col gap-6">
             {/* MAIN SERVICE CARD */}
-            <div className="p-7 bg-white/75 backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl">
-              <h3 className="text-xl font-extrabold text-gray-900 mb-5 tracking-tight">
-                Layanan Unggulan
+            <div
+              className="p-8 h-full bg-gradient-to-br from-white/85 to-white/60 backdrop-blur-xl 
+    border border-white/50 rounded-3xl shadow-[0_8px_25px_rgba(0,0,0,0.08)] 
+    relative overflow-hidden"
+            >
+              {/* Decorative Glow */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -top-10 -right-10 w-28 h-28 bg-blue-300/20 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-indigo-300/25 rounded-full blur-2xl"></div>
+              </div>
+
+              <h3 className="text-2xl font-extrabold text-gray-900 mb-6 tracking-tight relative z-10">
+                Layanan Kami
               </h3>
 
-              <div className="space-y-5">
+              <div className="space-y-2 relative z-10">
                 {[
                   {
                     icon: "❄️",
-                    title: "Cooling & Ventilation",
-                    desc: "AC Standing, Blower Embun, Misty Fan untuk semua skala event",
+                    title: "Sewa AC & Blower",
+                    desc: "Unit dingin maksimal untuk event indoor maupun outdoor.",
                   },
                   {
-                    icon: "🎬",
-                    title: "Lighting & Stage",
-                    desc: "Lighting ambience, spotlight, dan penataan panggung profesional",
+                    icon: "⚙️",
+                    title: "Perawatan Rutin",
+                    desc: "Semua unit dicek & dibersihkan sebelum pengiriman.",
                   },
                   {
-                    icon: "🔊",
-                    title: "Sound & Power",
-                    desc: "Sound system, kabel, teknisi onsite, hingga genset cadangan",
+                    icon: "⚡",
+                    title: "Instalasi Aman",
+                    desc: "Pemasangan rapi, aman, dan sesuai standar teknis.",
                   },
-                ].map((s, i) => (
+                  {
+                    icon: "🛠️",
+                    title: "Teknisi Standby",
+                    desc: "Monitoring selama acara untuk memastikan performa optimal.",
+                  },
+                ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex gap-4 p-3 rounded-xl bg-white/60 border border-white/40 shadow-sm hover:shadow-md transition"
+                    className="flex items-start gap-4 p-4 rounded-2xl bg-white/70 border border-white/60 
+        shadow-sm hover:shadow-lg hover:bg-white/80 transition-all duration-300
+        hover:-translate-y-[2px]"
                   >
-                    <div className="text-2xl">{s.icon}</div>
+                    <div className="text-3xl">{item.icon}</div>
+
                     <div>
-                      <p className="font-semibold text-gray-900">{s.title}</p>
-                      <p className="text-sm text-gray-600 leading-tight">
-                        {s.desc}
+                      <p className="font-semibold text-gray-900 text-sm">
+                        {item.title}
+                      </p>
+                      <p className="text-xs text-gray-600 mt-0.5 leading-tight">
+                        {item.desc}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
 
+              {/* CTA */}
               <button
                 onClick={openWhatsApp}
-                className="mt-6 bg-indigo-600 w-full text-white py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition shadow-md"
+                className="mt-7 w-full py-3 rounded-xl font-semibold
+      bg-indigo-600 text-white shadow-lg
+      hover:bg-indigo-700 transition-all duration-300 
+      hover:shadow-indigo-300/20 hover:-translate-y-[2px]
+      relative z-10"
               >
                 Konsultasi Gratis
               </button>
@@ -373,27 +398,7 @@ export default function HeroSection() {
             &#10095;
           </button>
         </div>
-      )}
-
-      {/* ================= FLOATING WA ================= */}
-      <button
-        onClick={openWhatsApp}
-        className="fixed bottom-5 right-5 z-50 bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          className="w-6 h-6"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 15a4 4 0 01-4 4H7l-4 2 2-4V7a4 4 0 014-4h10a4 4 0 014 4z"
-          />
-        </svg>
-      </button>
+      )}      
     </>
   );
 }
