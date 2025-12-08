@@ -99,25 +99,15 @@ export default function HeroSection() {
                 Unit berkualitas, instalasi rapi, tim handal—siap dukung acara
                 Anda dengan pelayanan maksimal.
               </p>
-
-              {/* <div className="flex gap-3 mt-6">
-                <a
-                  href="#catalog"
-                  className="bg-white text-indigo-700 px-4 py-2 rounded-lg font-medium shadow hover:scale-105 transition"
-                >
-                  Lihat Katalog
-                </a>
-                <button
-                  onClick={openWhatsApp}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-indigo-700 transition"
-                >
-                  Konsultasi WA
-                </button>
-              </div> */}
             </div>
 
             {/* hero metrics */}
-            <div className="absolute bottom-6 left-20 flex gap-4">
+            <div
+              className="flex flex-wrap gap-4 
+    w-full px-4 mt-4 sm:mt-0 
+    sm:absolute sm:bottom-6 sm:left-20 sm:w-auto 
+    justify-center sm:justify-start relative sm:relative"
+            >
               {[
                 { label: "Acara", value: "1200+" },
                 { label: "Unit", value: "300+" },
@@ -125,7 +115,7 @@ export default function HeroSection() {
               ].map((m, i) => (
                 <div
                   key={i}
-                  className="bg-white/10 border border-white/20 backdrop-blur px-4 py-2 rounded-xl text-white"
+                  className="bg-white/10 border border-white/20 backdrop-blur px-4 py-2 rounded-xl text-white text-center sm:text-left min-w-[70px]"
                 >
                   <p className="text-xs">{m.label}</p>
                   <p className="font-semibold">{m.value}</p>
@@ -398,7 +388,7 @@ export default function HeroSection() {
             &#10095;
           </button>
         </div>
-      )}      
+      )}
     </>
   );
 }
