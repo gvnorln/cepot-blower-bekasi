@@ -4,6 +4,16 @@ import React from "react";
 export default function FloatingCart({ cart = [], setCart, WHATSAPP_PHONE }) {
   const [open, setOpen] = React.useState(false);
 
+  const increaseQty = (id, variantName) => {
+    setCart(
+      cart.map((p) =>
+        p.id === id && p.selectedVariant.name === variantName
+          ? { ...p, qty: p.qty + 1 }
+          : p
+      )
+    );
+  };
+
   const decreaseQty = (id, variantName) => {
     setCart(
       cart
@@ -24,7 +34,6 @@ export default function FloatingCart({ cart = [], setCart, WHATSAPP_PHONE }) {
     );
   };
 
-  // SAFE PRICE GETTER (always valid)
   const getUnitPrice = (p) =>
     p.selectedVariant.pricePerUnit ??
     p.selectedVariant.pricePerPcs ??
@@ -41,7 +50,9 @@ export default function FloatingCart({ cart = [], setCart, WHATSAPP_PHONE }) {
     }
     let msg = `Halo, saya ingin memesan produk dari Cepot Blower Bekasi.%0A%0A`;
     cart.forEach((p) => {
-      msg += `${p.title} (${p.selectedVariant.name}) - ${getUnitPrice(p).toLocaleString()} × ${p.qty} = Rp${getTotal(p).toLocaleString()}%0A`;
+      msg += `${p.title} (${p.selectedVariant.name}) - ${getUnitPrice(
+        p
+      ).toLocaleString()} × ${p.qty} = Rp${getTotal(p).toLocaleString()}%0A`;
     });
     msg += `%0ATotal: Rp${totalPrice.toLocaleString()}%0A%0ANama: %0AAlamat: %0ACatatan:`;
     window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${msg}`, "_blank");
@@ -69,7 +80,6 @@ export default function FloatingCart({ cart = [], setCart, WHATSAPP_PHONE }) {
                         {p.selectedVariant.name}
                       </p>
 
-                      {/* --- CLEAN PRICE DISPLAY --- */}
                       <p className="text-xs text-gray-800 font-semibold mt-1">
                         Rp {unitPrice.toLocaleString()} × {p.qty} ={" "}
                         <span className="font-bold">
@@ -80,19 +90,28 @@ export default function FloatingCart({ cart = [], setCart, WHATSAPP_PHONE }) {
 
                     <div className="flex gap-1 mt-2">
                       <button
-                        onClick={() => decreaseQty(p.id, p.selectedVariant.name)}
+                        onClick={() =>
+                          decreaseQty(p.id, p.selectedVariant.name)
+                        }
                         className="text-red-500 font-bold px-2"
                       >
                         -
                       </button>
+
+                      {/* FIX: gunakan increaseQty */}
                       <button
-                        onClick={() => setCart([...cart, { ...p, qty: 1 }])}
+                        onClick={() =>
+                          increaseQty(p.id, p.selectedVariant.name)
+                        }
                         className="text-green-500 font-bold px-2"
                       >
                         +
                       </button>
+
                       <button
-                        onClick={() => removeFromCart(p.id, p.selectedVariant.name)}
+                        onClick={() =>
+                          removeFromCart(p.id, p.selectedVariant.name)
+                        }
                         className="text-gray-400 font-bold px-2"
                       >
                         x
