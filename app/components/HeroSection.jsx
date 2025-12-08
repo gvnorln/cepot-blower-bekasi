@@ -103,10 +103,8 @@ export default function HeroSection() {
 
             {/* hero metrics */}
             <div
-              className="flex flex-wrap gap-4 
-    w-full px-4 mt-4 sm:mt-0 
-    sm:absolute sm:bottom-6 sm:left-20 sm:w-auto 
-    justify-center sm:justify-start relative sm:relative"
+              className="flex flex-row gap-3 overflow-x-auto justify-center mt-4 sm:mt-0
+  sm:absolute sm:bottom-6 sm:left-20 sm:w-auto w-full"
             >
               {[
                 { label: "Acara", value: "1200+" },
@@ -115,7 +113,7 @@ export default function HeroSection() {
               ].map((m, i) => (
                 <div
                   key={i}
-                  className="bg-white/10 border border-white/20 backdrop-blur px-4 py-2 rounded-xl text-white text-center sm:text-left min-w-[70px]"
+                  className="flex-shrink-0 bg-white/10 border border-white/20 backdrop-blur px-4 py-2 rounded-xl text-white text-center min-w-[70px]"
                 >
                   <p className="text-xs">{m.label}</p>
                   <p className="font-semibold">{m.value}</p>
