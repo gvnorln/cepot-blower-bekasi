@@ -32,11 +32,9 @@ export default function GalleryMasonryGlassBackground() {
   const heights = ["h-48", "h-56", "h-64", "h-52", "h-60", "h-44", "h-50", "h-58"];
 
   return (
-    <section
-      id="gallery"
-      className="mt-12 px-2 sm:px-4 lg:px-0 relative"
-    >
-      {/* Section Background */}
+    <section id="gallery" className="mt-12 px-2 sm:px-4 lg:px-0 relative">
+      
+      {/* Background Section */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 -z-10"></div>
 
       <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
@@ -50,10 +48,10 @@ export default function GalleryMasonryGlassBackground() {
             className={`relative mb-6 break-inside-avoid cursor-pointer group overflow-hidden rounded-3xl transition-transform duration-300 hover:scale-105`}
             onClick={() => openLightbox(event)}
           >
-            {/* Glass card background */}
+            {/* Glass background */}
             <div className="absolute inset-0 rounded-3xl bg-white/20 backdrop-blur-md shadow-lg"></div>
 
-            {/* Overlay info dengan glassmorphism */}
+            {/* Glass info tag */}
             <div className="absolute top-3 left-3 z-10 bg-white/30 backdrop-blur-md text-gray-900 dark:text-white text-xs px-3 py-1 rounded-xl font-medium shadow-sm opacity-90 group-hover:opacity-100 transition-opacity duration-300">
               {event.title} — {event.photos.length} foto
             </div>
@@ -67,7 +65,7 @@ export default function GalleryMasonryGlassBackground() {
               className={`relative w-full object-cover rounded-3xl shadow-md transition-transform duration-500 group-hover:scale-110 ${heights[i % heights.length]}`}
             />
 
-            {/* Mini preview thumbnails saat hover */}
+            {/* Mini thumbnails */}
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               {event.photos.slice(0, 3).map((photo, idx) => (
                 <Image
@@ -105,6 +103,7 @@ export default function GalleryMasonryGlassBackground() {
             <div className="bg-white/30 backdrop-blur-md text-gray-900 dark:text-white text-sm px-3 py-1 rounded-xl mb-3 shadow-sm">
               {currentEvent.title} — Foto {currentIndex + 1}/{currentEvent.photos.length}
             </div>
+
             <Image
               src={currentEvent.photos[currentIndex]}
               alt={`${currentEvent.title} Foto ${currentIndex + 1}`}
