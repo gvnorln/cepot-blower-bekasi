@@ -7,8 +7,12 @@ export default function ProductCard({ p, addToCart }) {
   const [selectedVariant, setSelectedVariant] = useState(p.variants[0]);
   const [showModal, setShowModal] = useState(false);
 
+  // ------------------------------------------------------------------
+  // HANDLERS
+  // ------------------------------------------------------------------
   const handleIncrement = () => setQty(qty + 1);
   const handleDecrement = () => setQty(Math.max(0, qty - 1));
+
   const handleChange = (e) => {
     const val = parseInt(e.target.value);
     if (!isNaN(val) && val >= 0) setQty(val);
@@ -16,23 +20,40 @@ export default function ProductCard({ p, addToCart }) {
 
   const handleAddToCart = () => {
     if (qty < selectedVariant.minOrder) {
-      alert(
-        `Minimal order untuk produk ini adalah ${selectedVariant.minOrder}`
-      );
+      alert(`Minimal order untuk produk ini adalah ${selectedVariant.minOrder}`);
       return;
     }
-    addToCart({ ...p, qty, selectedVariant });
+
+    addToCart({
+      ...p,
+      qty,
+      selectedVariant,
+    });
+
     setQty(0);
   };
 
+  // ------------------------------------------------------------------
+  // PRICE CALC
+  // ------------------------------------------------------------------
   const pricePerUnit =
     selectedVariant.pricePerUnit || selectedVariant.pricePerPcs;
-  const priceDisplay = pricePerUnit.toLocaleString("id-ID");
+  const priceDisplay = pricePerUnit
+    ? pricePerUnit.toLocaleString("id-ID")
+    : "0";
+
+  // FINAL SPECS SOURCE:
+  // Priority: Variant specs → product specs → empty array
+  const specsList = selectedVariant.specs || p.specs || [];
 
   return (
     <>
+      {/* --------------------------------------------------------------
+          PRODUCT CARD
+      -------------------------------------------------------------- */}
       <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition hover:shadow-lg hover:-translate-y-1 duration-300 font-sans">
-        {/* Image */}
+        
+        {/* Product Image */}
         <div className="w-full overflow-hidden rounded-t-2xl">
           <img
             src={p.image}
@@ -41,14 +62,17 @@ export default function ProductCard({ p, addToCart }) {
           />
         </div>
 
-        {/* Content */}
+        {/* Product Body */}
         <div className="p-4 flex flex-col gap-3">
-          {/* Title & Short Description */}
+
+          {/* Title + Short Desc */}
           <div>
             <h4 className="text-gray-900 font-semibold text-base md:text-lg line-clamp-2">
               {p.title}
             </h4>
-            <p className="text-gray-500 text-sm mt-1 line-clamp-2">{p.short}</p>
+            <p className="text-gray-500 text-sm mt-1 line-clamp-2">
+              {p.short}
+            </p>
           </div>
 
           {/* Variant Selector */}
@@ -70,7 +94,7 @@ export default function ProductCard({ p, addToCart }) {
             </select>
           </div>
 
-          {/* Price & Minimal Order */}
+          {/* Price Display */}
           <div className="flex flex-col gap-1 mt-2">
             <div className="text-indigo-600 font-bold text-lg md:text-xl">
               Rp {priceDisplay} / pcs
@@ -80,8 +104,9 @@ export default function ProductCard({ p, addToCart }) {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* Buttons */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
+
             {/* Detail Button */}
             <button
               onClick={() => setShowModal(true)}
@@ -90,7 +115,7 @@ export default function ProductCard({ p, addToCart }) {
               Detail
             </button>
 
-            {/* Qty Control + Add to Cart */}
+            {/* Qty + Add */}
             <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1">
               <button
                 onClick={handleDecrement}
@@ -98,6 +123,7 @@ export default function ProductCard({ p, addToCart }) {
               >
                 -
               </button>
+
               <input
                 type="number"
                 value={qty}
@@ -105,12 +131,14 @@ export default function ProductCard({ p, addToCart }) {
                 className="w-12 text-center text-sm border border-gray-300 rounded px-1 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 min={0}
               />
+
               <button
                 onClick={handleIncrement}
                 className="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
               >
                 +
               </button>
+
               <button
                 onClick={handleAddToCart}
                 className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition"
@@ -122,10 +150,14 @@ export default function ProductCard({ p, addToCart }) {
         </div>
       </article>
 
-      {/* Modal */}
+      {/* --------------------------------------------------------------
+          MODAL DETAIL
+      -------------------------------------------------------------- */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-2xl max-w-md w-full relative shadow-lg">
+          
+          <div className="bg-white p-6 rounded-2xl max-w-md w-full relative shadow-lg animate-[fadeIn_0.2s]">
+
             {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
@@ -134,19 +166,23 @@ export default function ProductCard({ p, addToCart }) {
               ×
             </button>
 
-            {/* Modal Content */}
+            {/* Image */}
             <img
               src={p.image}
               alt={p.title}
               className="w-full h-48 object-cover rounded-xl"
             />
+
+            {/* Title */}
             <h2 className="text-xl font-bold mt-4">{p.title}</h2>
             <p className="text-gray-600 mt-2">{p.short}</p>
 
+            {/* Variant */}
             <div className="mt-3">
               <strong>Variant:</strong> {selectedVariant.name}
             </div>
 
+            {/* Price */}
             <div className="text-indigo-600 font-bold text-lg mt-1">
               Rp {priceDisplay} / pcs
             </div>
@@ -155,8 +191,9 @@ export default function ProductCard({ p, addToCart }) {
               <strong>Minimal order:</strong> {selectedVariant.minOrder} pcs
             </div>
 
+            {/* Variant Specs / Product Specs */}
             <ul className="mt-3 list-disc list-inside text-gray-600 text-sm">
-              {p.specs.map((s, i) => (
+              {specsList.map((s, i) => (
                 <li key={i}>{s}</li>
               ))}
             </ul>

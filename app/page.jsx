@@ -8,6 +8,7 @@ import HeroSection from "./components/HeroSection";
 import CatalogGrid from "./components/CatalogGrid";
 import ProductModal from "./components/ProductModal";
 import AboutSection from "./components/AboutSection";
+import GalleryGrid from "./components/GalleryGrid";
 import ContactSection from "./components/ContactSection";
 import FloatingCart from "./components/FloatingCart";
 import FloatingWA from "./components/FloatingWA";
@@ -84,6 +85,8 @@ export default function Page() {
             addToCart={addToCart}
           />
         )}
+
+        <GalleryGrid />
 
         <AboutSection />
         <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />

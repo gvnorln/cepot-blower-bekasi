@@ -10,7 +10,7 @@ export default function Header({ WHATSAPP_PHONE }) {
   const menuItems = [
     { name: "Home", href: "/" },
     { name: "Catalog", href: "#catalog" },
-    { name: "Gallery", href: "/gallery", isRoute: true },
+    { name: "Gallery", href: "#gallery", isRoute: true },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
   ];
