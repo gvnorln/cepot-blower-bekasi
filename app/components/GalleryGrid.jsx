@@ -35,7 +35,7 @@ export default function GalleryMasonryGlassBackground() {
     <section id="gallery" className="mt-12 px-2 sm:px-4 lg:px-0 relative">
       
       {/* Background Section */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 -z-10"></div>
+      <div className="absolute inset-0 z-10"></div>
 
       <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
         Gallery Events

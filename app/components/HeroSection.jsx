@@ -103,8 +103,11 @@ export default function HeroSection() {
 
             {/* hero metrics */}
             <div
-              className="flex flex-row gap-3 overflow-x-auto justify-center mt-4 sm:mt-0
-  sm:absolute sm:bottom-6 sm:left-20 sm:w-auto w-full"
+              className="
+    flex flex-row gap-3 overflow-x-auto justify-center 
+    w-full mt-4 
+    sm:mt-0 sm:absolute sm:bottom-6 sm:left-20 sm:w-auto
+  "
             >
               {[
                 { label: "Acara", value: "1200+" },
