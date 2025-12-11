@@ -58,7 +58,7 @@ export default function Testimoni() {
   return (
     <section
       id="testimoni"
-      className="relative w-full py-28 px-4 sm:px-12 lg:px-24 bg-linear-to-b from-[#0c0b1b] via-[#201f38] to-[#13112a] text-white overflow-hidden"
+      className="relative w-full py-28 px-4 sm:px-12 lg:px-24 bg-linear-to-b from-[#0c0b1b] via-[#201f38] to-[#13112a] text-white overflow-hidden rounded-3xl "
     >
       {/* Heading */}
       <div className="text-center max-w-3xl mx-auto mb-20">
