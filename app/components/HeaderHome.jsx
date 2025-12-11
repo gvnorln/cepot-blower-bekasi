@@ -12,6 +12,7 @@ export default function Header({ WHATSAPP_PHONE }) {
     { name: "Catalog", href: "#catalog" },
     { name: "Gallery", href: "#gallery", isRoute: true },
     { name: "About", href: "#about" },
+    { name: "Testimoni", href: "#testimoni" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -42,12 +43,18 @@ Catatan:
         shadow-lg shadow-black/5
       "
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        
+      <div
+        className="
+          w-full mx-auto
+          px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20
+          py-4
+          flex items-center justify-between
+        "
+      >
         {/* Logo */}
         <div
           className="flex items-center gap-4 cursor-pointer"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <div className="w-10 h-10 flex items-center justify-center">
             <img
@@ -58,7 +65,9 @@ Catatan:
           </div>
 
           <div className="leading-tight">
-            <h1 className="text-lg font-semibold text-gray-800">Cepot Blower Bekasi</h1>
+            <h1 className="text-lg font-semibold text-gray-800">
+              Cepot Blower Bekasi
+            </h1>
             <p className="text-xs text-gray-600 mt-0.5">
               Sewa blower, AC, lighting, catering gear
             </p>
@@ -117,7 +126,7 @@ Catatan:
           fixed top-0 right-0 h-full w-72
           bg-white
           shadow-2xl border-l border-gray-200
-          transform transition-transform duration-300 z-[60]
+          transform transition-transform duration-300 z-60
           flex flex-col
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}

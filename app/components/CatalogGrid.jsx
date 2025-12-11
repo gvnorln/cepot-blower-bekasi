@@ -3,7 +3,12 @@
 import React, { useMemo, useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 
-export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE, addToCart }) {
+export default function CatalogGrid({
+  products = [],
+  setSelected,
+  WHATSAPP_PHONE,
+  addToCart,
+}) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [sortBy, setSortBy] = useState("cheapest");
   const [query, setQuery] = useState("");
@@ -15,7 +20,9 @@ export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE
   // CATEGORY LIST
   // ----------------------------------
   const categories = useMemo(() => {
-    const cats = Array.from(new Set((products || []).map((p) => p.category || "Uncategorized")));
+    const cats = Array.from(
+      new Set((products || []).map((p) => p.category || "Uncategorized"))
+    );
     return ["all", ...cats];
   }, [products]);
 
@@ -24,7 +31,8 @@ export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE
   // ----------------------------------
   const productsWithMeta = useMemo(() => {
     return products.map((p, i) => {
-      const publishedAt = p.publishedAt ?? new Date(Date.now() - i * 86400000).toISOString();
+      const publishedAt =
+        p.publishedAt ?? new Date(Date.now() - i * 86400000).toISOString();
       const popularity = p.popularity ?? Math.max(1, 100 - i);
 
       return { ...p, publishedAt, popularity };
@@ -69,7 +77,9 @@ export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE
     } else if (sortBy === "popular") {
       list = [...list].sort((a, b) => b.popularity - a.popularity);
     } else if (sortBy === "newest") {
-      list = [...list].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+      list = [...list].sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
     }
 
     return list;
@@ -88,9 +98,15 @@ export default function CatalogGrid({ products = [], setSelected, WHATSAPP_PHONE
   // ----------------------------------
   // PAGINATION
   // ----------------------------------
-  const totalPages = Math.max(1, Math.ceil(filteredSortedList.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredSortedList.length / ITEMS_PER_PAGE)
+  );
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
-  const pagedItems = filteredSortedList.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const pagedItems = filteredSortedList.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   // ----------------------------------
   // WHATSAPP
@@ -109,18 +125,42 @@ Harga: Rp ${priceValue.toLocaleString("id-ID")}`
   // RENDER
   // ----------------------------------
   return (
-    <section className="mt-12 px-4 sm:px-6 lg:px-8">
+    <section
+      id="catalog"
+      className="
+    px-4 sm:px-6 lg:px-12 py-10
+    bg-linear-to-br from-[#faf7f2] via-[#ffffff] to-[#f3efe7]
+    rounded-3xl shadow-[0_0_25px_rgba(0,0,0,0.06)]
+    border border-[#e9e2d4]/60
+  "
+    >
       {/* Header */}
-      <div className="mb-8">
-        <h3 className="text-3xl font-bold text-gray-800">Katalog Produk</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Cari perlengkapan event yang kamu butuhkan — filter kategori dan urutkan produk.
+      <div className="mb-4 text-center">
+        {/* Header */}
+        <h3
+          className="
+    text-3xl sm:text-4xl font-bold text-center
+    bg-linear-to-r from-[#1f1b16] to-[#3b2d23]
+    bg-clip-text text-transparent pb-1.5
+  "
+        >
+          Katalog <span className="text-indigo-600">Cepot Blower Bekasi</span>
+        </h3>
+        <p className=" text-sm text-gray-500">
+          Cari perlengkapan event yang kamu butuhkan — filter kategori dan
+          urutkan produk.
         </p>
       </div>
 
       {/* 🔍 Search + Filter Panel */}
-      <div className="bg-white shadow-lg border border-gray-100 p-5 rounded-2xl flex flex-col gap-4 mb-8">
-
+      <div
+        className="
+    bg-white/70 backdrop-blur-md
+    shadow-[0_8px_28px_rgba(0,0,0,0.06)]
+    border border-[#e5dccc]
+    p-5 rounded-2xl flex flex-col gap-4 mb-8
+  "
+      >
         {/* Search Input */}
         <div className="relative">
           <input
@@ -155,8 +195,8 @@ Harga: Rp ${priceValue.toLocaleString("id-ID")}`
               className={`text-sm px-3 py-1.5 rounded-full border transition font-medium
                 ${
                   activeCategory === c
-                    ? "bg-indigo-600 text-white border-indigo-600"
-                    : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                    ? "bg-linear-to-r from-[#caa86a] to-[#e8d4a7] text-[#2d2417] border-[#caa86a]"
+                    : "bg-white/70 text-gray-700 border-[#e4dcc9] hover:bg-[#faf6f0]"
                 }`}
             >
               {c === "all" ? "Semua Kategori" : c}
@@ -182,13 +222,14 @@ Harga: Rp ${priceValue.toLocaleString("id-ID")}`
       <hr className="border-gray-200 mb-6" />
 
       {/* GRID */}
-      <div className="min-h-[80px]">
+      <div className="min-h-20">
         {loading ? (
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
             {Array.from({ length: ITEMS_PER_PAGE }).map((_, i) => (
               <div key={i} className="break-inside-avoid mb-4">
                 <div className="animate-pulse bg-white rounded-xl shadow-sm p-3 border border-gray-100">
-                  <div className="bg-gray-200 h-44 rounded-md mb-3" />
+                  <div className="bg-[#e9e2d4] h-44 rounded-md mb-3" />
+
                   <div className="h-4 bg-gray-200 rounded w-3/5 mb-2" />
                   <div className="h-3 bg-gray-200 rounded w-1/3" />
                 </div>
@@ -197,7 +238,9 @@ Harga: Rp ${priceValue.toLocaleString("id-ID")}`
           </div>
         ) : filteredSortedList.length === 0 ? (
           <div className="bg-white rounded-xl p-8 text-center shadow border border-gray-100">
-            <p className="text-lg font-semibold text-gray-700">Produk tidak ditemukan</p>
+            <p className="text-lg font-semibold text-gray-700">
+              Produk tidak ditemukan
+            </p>
           </div>
         ) : (
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
@@ -222,32 +265,46 @@ Harga: Rp ${priceValue.toLocaleString("id-ID")}`
             disabled={page === 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             className={`px-3 py-1.5 rounded-lg border bg-white text-sm shadow
-              ${page === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"}`}
+              ${
+                page === 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100 cursor-pointer"
+              }`}
           >
             Prev
           </button>
 
           <div className="flex gap-2">
-            {Array.from({ length: totalPages }).slice(0, 7).map((_, i) => {
-              const num = i + 1;
-              return (
-                <button
-                  key={num}
-                  onClick={() => setPage(num)}
-                  className={`px-3 py-1 rounded-md border shadow-sm text-sm
-                    ${page === num ? "bg-indigo-600 text-white" : "bg-white hover:bg-gray-100"}`}
-                >
-                  {num}
-                </button>
-              );
-            })}
+            {Array.from({ length: totalPages })
+              .slice(0, 7)
+              .map((_, i) => {
+                const num = i + 1;
+                return (
+                  <button
+                    key={num}
+                    onClick={() => setPage(num)}
+                    className={`px-3 py-1 rounded-md border shadow-sm text-sm
+                    ${
+                      page === num
+                        ? "bg-linear-to-r from-[#caa86a] to-[#e8d4a7] text-[#2d2417] border-[#caa86a]"
+                        : "bg-white hover:bg-gray-100"
+                    }`}
+                  >
+                    {num}
+                  </button>
+                );
+              })}
           </div>
 
           <button
             disabled={page === totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             className={`px-3 py-1.5 rounded-lg border bg-white text-sm shadow
-              ${page === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"}`}
+              ${
+                page === totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100 cursor-pointer"
+              }`}
           >
             Next
           </button>

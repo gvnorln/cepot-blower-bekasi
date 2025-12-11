@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { SAMPLE_PRODUCTS } from "../data/products";
 
 import HeaderHome from "./components/HeaderHome";
@@ -8,6 +9,7 @@ import HeroSection from "./components/HeroSection";
 import CatalogGrid from "./components/CatalogGrid";
 import ProductModal from "./components/ProductModal";
 import AboutSection from "./components/AboutSection";
+import Testimoni from "./components/Testimoni";
 import GalleryGrid from "./components/GalleryGrid";
 import ContactSection from "./components/ContactSection";
 import FloatingCart from "./components/FloatingCart";
@@ -23,7 +25,10 @@ export default function Page() {
 
   const [cart, setCart] = useState([]);
 
-  const categories = ["all", ...new Set(SAMPLE_PRODUCTS.map((p) => p.category))];
+  const categories = [
+    "all",
+    ...new Set(SAMPLE_PRODUCTS.map((p) => p.category)),
+  ];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -32,8 +37,7 @@ export default function Page() {
       if (p.price > maxPrice) return false;
       if (!q) return true;
       return (
-        p.title.toLowerCase().includes(q) ||
-        p.short.toLowerCase().includes(q)
+        p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q)
       );
     });
   }, [query, category, maxPrice]);
@@ -57,38 +61,69 @@ export default function Page() {
     });
   };
 
+  // Variants untuk animasi ringan & responsive
+  const containerVariant = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15, // lebih cepat supaya ringan
+      },
+    },
+  };
+
+  const sectionVariant = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      
-      {/* Floating Cart */}
+    <div className="px-4 sm:px-4 relative bg-linear-to-b from-[#fcfaf5] via-[#f9f6ee] to-[#f3ede3]">
       <FloatingCart
         cart={cart}
         setCart={setCart}
         WHATSAPP_PHONE={WHATSAPP_PHONE}
       />
 
-      {/* Fixed Navbar */}
       <HeaderHome WHATSAPP_PHONE={WHATSAPP_PHONE} />
 
-      {/* MAIN CONTENT — Added padding to avoid overlap */}
-      <main className="max-w-6xl mx-auto px-4 py-8 pt-[95px]">
-        <HeroSection
-          query={query}
-          setQuery={setQuery}
-          category={category}
-          setCategory={setCategory}
-          categories={categories}
-          maxPrice={maxPrice}
-          setMaxPrice={setMaxPrice}
-        />
+      <motion.main
+        className="pt-[72px] space-y-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={containerVariant}
+      >
+        {/* Hero */}
+        <motion.div
+          variants={sectionVariant}
+          className="relative"
+        >
+          <HeroSection
+            query={query}
+            setQuery={setQuery}
+            category={category}
+            setCategory={setCategory}
+            categories={categories}
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
+          />
+        </motion.div>
 
-        <CatalogGrid
-          products={filtered}
-          setSelected={setSelected}
-          WHATSAPP_PHONE={WHATSAPP_PHONE}
-          addToCart={addToCart}
-        />
+        {/* Catalog Grid */}
+        <motion.div variants={sectionVariant}>
+          <CatalogGrid
+            products={filtered}
+            setSelected={setSelected}
+            WHATSAPP_PHONE={WHATSAPP_PHONE}
+            addToCart={addToCart}
+          />
+        </motion.div>
 
+        {/* Product Modal */}
         {selected && (
           <ProductModal
             product={selected}
@@ -98,12 +133,30 @@ export default function Page() {
           />
         )}
 
-        <GalleryGrid />
-        <AboutSection />
-        <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />
-      </main>
+        {/* Gallery */}
+        <motion.div variants={sectionVariant}>
+          <GalleryGrid />
+        </motion.div>
 
-      {/* Floating WhatsApp */}
+        {/* About Section */}
+        <motion.div variants={sectionVariant}>
+          <AboutSection />
+        </motion.div>
+
+        {/* Testimoni (tanpa 3D untuk HP) */}
+        <motion.div
+          variants={sectionVariant}
+          className="relative"
+        >
+          <Testimoni />
+        </motion.div>
+
+        {/* Contact */}
+        <motion.div variants={sectionVariant}>
+          <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />
+        </motion.div>
+      </motion.main>
+
       <FloatingWA WHATSAPP_PHONE={WHATSAPP_PHONE} />
     </div>
   );

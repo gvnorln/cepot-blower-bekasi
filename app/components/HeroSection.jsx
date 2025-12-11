@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 export default function HeroSection() {
   const photos = [
@@ -28,6 +28,7 @@ export default function HeroSection() {
   ];
   const [testIndex, setTestIndex] = useState(0);
 
+  // Auto slide hero & testimonial
   useEffect(() => {
     const t = setInterval(
       () => setHeroIndex((p) => (p + 1) % photos.length),
@@ -37,27 +38,43 @@ export default function HeroSection() {
       () => setTestIndex((p) => (p + 1) % testimonials.length),
       4800
     );
-
     return () => {
       clearInterval(t);
       clearInterval(tt);
     };
   }, []);
 
-  // Lightbox
-  function openLightbox(i) {
+  // Lightbox handlers
+  const openLightbox = useCallback((i) => {
     setLightboxIndex(i);
     setLightboxOpen(true);
-  }
-  function closeLightbox() {
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
-  }
-  function prevLightbox() {
+    document.body.style.overflow = "";
+  }, []);
+
+  const prevLightbox = useCallback(() => {
     setLightboxIndex((p) => (p - 1 + photos.length) % photos.length);
-  }
-  function nextLightbox() {
+  }, [photos.length]);
+
+  const nextLightbox = useCallback(() => {
     setLightboxIndex((p) => (p + 1) % photos.length);
-  }
+  }, [photos.length]);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    function onKey(e) {
+      if (!lightboxOpen) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") prevLightbox();
+      if (e.key === "ArrowRight") nextLightbox();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, closeLightbox, prevLightbox, nextLightbox]);
 
   const WA_PHONE = "6281298229660";
   function openWhatsApp() {
@@ -70,312 +87,226 @@ export default function HeroSection() {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4">
-        <div className="rounded-3xl overflow-hidden relative shadow-xl">
-          <div className="relative h-[25rem] sm:h-[30rem]">
-            {photos.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt="Hero"
-                className={`absolute inset-0 w-full h-full object-cover duration-[1200ms] transition-opacity ${
-                  i === heroIndex ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            ))}
+      <section
+        className="
+          relative w-full overflow-hidden
+          bg-linear-to-b 
+          from-[#0f0c29] via-[#302b63] to-[#24243e]
+        "
+      >
+        {/* Slideshow images */}
+        <div className="absolute inset-0">
+          {photos.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt={`Hero ${i + 1}`}
+              loading="lazy"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-[cubic-bezier(.2,.9,.2,1)] transform-gpu ${
+                i === heroIndex
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-105"
+              }`}
+              style={{ willChange: "opacity, transform" }}
+            />
+          ))}
 
-            <div className="absolute inset-0 bg-gradient-to-br from-black/70 to-transparent" />
+          {/* Overlays & decorative glows */}
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Premium overlays */}
+            <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/45 to-black/20" />
 
-            <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 lg:px-20">
-              <p className="bg-white/20 text-white px-3 py-1 rounded-full text-sm w-fit mb-4 backdrop-blur">
+            {/* Gold Mist Glow */}
+            <div className="absolute -left-32 -top-24 w-96 h-96 rounded-full bg-[rgba(255,215,160,0.12)] blur-[110px]" />
+
+            {/* Purple Lux Glow */}
+            <div className="absolute -right-40 bottom-0 w-[420px] h-[420px] rounded-full bg-[rgba(160,140,255,0.14)] blur-[140px]" />
+
+            {/* Soft bottom fog */}
+            <div className="absolute bottom-0 left-0 right-0 h-40 bg-linear-to-t from-black/40 to-transparent" />
+          </div>
+        </div>
+
+        {/* Content area (responsive height: medium on mobile, larger on desktop) */}
+        <div className="relative z-20 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-16 py-6 sm:py-8 lg:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* LEFT: headline, copy, CTA, metrics */}
+            <div className="flex flex-col gap-4 md:gap-5">
+              <div
+                className="
+              inline-block rounded-full
+              bg-white/5 backdrop-blur-xl border border-white/20
+              px-3 py-1 text-[11px] sm:text-xs text-white/95 w-fit
+              shadow-[0_0_12px_rgba(255,255,255,0.08)]
+  "
+              >
                 Penyewaan Perlengkapan Event
-              </p>
+              </div>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold text-white max-w-xl leading-tight">
+              <h1
+                className="
+                text-transparent bg-clip-text
+                bg-linear-to-r from-[#f6e7d4] via-white to-[#dcc7a1]
+                text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold
+                leading-snug drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]
+              "
+              >
                 Sewa AC, Blower, Lighting & Sound untuk Acara Profesional
               </h1>
 
-              <p className="mt-4 text-white/90 max-w-md text-sm sm:text-base leading-relaxed">
-                Unit berkualitas, instalasi rapi, tim handal—siap dukung acara
-                Anda dengan pelayanan maksimal.
+              <p className="text-white/85 text-xs sm:text-sm md:text-base max-w-lg leading-relaxed">
+                Unit berkualitas, instalasi rapi, tim handal. Siap mendukung
+                acara besar Anda dengan layanan terbaik.
               </p>
+
+              <div className="flex flex-wrap gap-3 items-center mt-2">
+                <button
+                  onClick={openWhatsApp}
+                  className="
+                  rounded-full px-5 py-2.5 sm:px-6 sm:py-3 font-semibold text-gray-900
+                  bg-linear-to-r from-[#f5e6d3] to-[#e8d5b5]
+                  shadow-[0_8px_22px_rgba(0,0,0,0.25)]
+                  hover:shadow-[0_12px_28px_rgba(0,0,0,0.35)]
+                  hover:scale-[1.03] transition
+                "
+                >
+                  Konsultasi Gratis
+                </button>
+
+                <a
+                  href="#services"
+                  className="rounded-full px-3 py-2 text-sm bg-white/5 border border-white/10 text-white/90 hover:bg-white/10 transition"
+                >
+                  Lihat Layanan
+                </a>
+              </div>
+
+              {/* Metrics - show on md+ */}
+              <div className="hidden md:flex gap-3 mt-4">
+                {[
+                  { label: "Acara", value: "1200+" },
+                  { label: "Unit", value: "300+" },
+                  { label: "Rating", value: "4.9★" },
+                ].map((m, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center justify-center min-w-[84px] px-3 py-2 rounded-2xl bg-white/6 backdrop-blur-md border border-white/10 text-white text-center shadow-sm"
+                  >
+                    <p className="text-[11px] opacity-90">{m.label}</p>
+                    <p className="font-semibold mt-1">{m.value}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* hero metrics */}
-            <div
-              className="
-    flex flex-row gap-3 overflow-x-auto justify-center 
-    w-full mt-4 
-    sm:mt-0 sm:absolute sm:bottom-6 sm:left-20 sm:w-auto
-  "
-            >
-              {[
-                { label: "Acara", value: "1200+" },
-                { label: "Unit", value: "300+" },
-                { label: "Rating", value: "4.9★" },
-              ].map((m, i) => (
-                <div
-                  key={i}
-                  className="flex-shrink-0 bg-white/10 border border-white/20 backdrop-blur px-4 py-2 rounded-xl text-white text-center min-w-[70px]"
-                >
-                  <p className="text-xs">{m.label}</p>
-                  <p className="font-semibold">{m.value}</p>
+            {/* RIGHT: gallery card (auto columns) */}
+            <div className="relative">
+              <div className="rounded-3xl overflow-hidden bg-white/6 backdrop-blur border border-white/8 shadow-xl p-3 sm:p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                  {photos.map((src, i) => (
+                    <button
+                      key={i}
+                      onClick={() => openLightbox(i)}
+                      className="group relative rounded-xl overflow-hidden w-full h-40 sm:h-36 md:h-28 lg:h-32"
+                      aria-label={`Buka foto ${i + 1}`}
+                    >
+                      <img
+                        src={src}
+                        alt={`Equipment ${i + 1}`}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
+                    </button>
+                  ))}
                 </div>
-              ))}
+
+                <div className="mt-3 px-1 sm:px-2">
+                  <h3 className="text-white font-semibold text-sm">
+                    Preview Perlengkapan
+                  </h3>
+                  <p className="text-xs text-white/80 mt-1">
+                    Klik gambar untuk memperbesar. Cocok untuk wedding, konser,
+                    dan event outdoor.
+                  </p>
+
+                  <div className="mt-3 grid grid-cols-1 gap-2.5">
+                    {[
+                      { icon: "❄️", title: "Sewa AC & Blower" },
+                      { icon: "⚡", title: "Lighting & Sound" },
+                      { icon: "🛠️", title: "Instalasi Profesional" },
+                    ].map((it, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 bg-white/4 border border-white/6 rounded-xl p-2.5"
+                      >
+                        <div className="text-base">{it.icon}</div>
+                        <p className="text-white/95 font-medium text-xs sm:text-sm">
+                          {it.title}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="pointer-events-none absolute -right-6 top-4 w-20 h-20 sm:w-24 sm:h-24 rounded-full blur-3xl bg-purple-300/12" />
             </div>
+          </div>
+        </div>
+
+        {/* BOTTOM METRICS MOBILE (visible on small screens) */}
+        <div className="md:hidden px-4 sm:px-6 pb-6 z-10 relative">
+          <div className="flex gap-3 justify-center">
+            {[
+              { label: "Acara", value: "1200+" },
+              { label: "Unit", value: "300+" },
+              { label: "Rating", value: "4.9★" },
+            ].map((m, i) => (
+              <div
+                key={i}
+                className="bg-white/6 backdrop-blur px-3 py-2 rounded-xl text-white text-center min-w-[68px] border border-white/10"
+              >
+                <p className="text-xs leading-tight">{m.label}</p>
+                <p className="font-semibold mt-1">{m.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ================= MAIN CONTENT ================= */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-10">
-        {/* HIGHLIGHT CARDS */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[
-            {
-              title: "Pengiriman Tepat Waktu",
-              sub: "On-time delivery",
-              gradient: "from-indigo-200 to-indigo-400",
-            },
-            {
-              title: "Instalasi Profesional",
-              sub: "Teknisi ahli",
-              gradient: "from-emerald-200 to-emerald-400",
-            },
-            {
-              title: "Unit Terawat Maksimal",
-              sub: "Bersih & prima",
-              gradient: "from-amber-200 to-amber-400",
-            },
-          ].map((c, i) => (
-            <div
-              key={i}
-              className="p-4 flex gap-4 bg-white/70 backdrop-blur border border-white/30 rounded-2xl shadow hover:shadow-md transition"
-            >
-              <div
-                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${c.gradient} flex items-center justify-center font-bold text-white`}
-              >
-                {c.title[0]}
-              </div>
-              <div>
-                <p className="text-gray-800 font-semibold">{c.title}</p>
-                <p className="text-gray-500 text-sm">{c.sub}</p>
-              </div>
-            </div>
-          ))}
-        </section>
-
-        {/* SERVICES + GALLERY */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* SERVICES (REDESIGNED) */}
-          <div className="md:col-span-1 flex flex-col gap-6">
-            {/* MAIN SERVICE CARD */}
-            <div
-              className="p-8 h-full bg-gradient-to-br from-white/85 to-white/60 backdrop-blur-xl 
-    border border-white/50 rounded-3xl shadow-[0_8px_25px_rgba(0,0,0,0.08)] 
-    relative overflow-hidden"
-            >
-              {/* Decorative Glow */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute -top-10 -right-10 w-28 h-28 bg-blue-300/20 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-indigo-300/25 rounded-full blur-2xl"></div>
-              </div>
-
-              <h3 className="text-2xl font-extrabold text-gray-900 mb-6 tracking-tight relative z-10">
-                Layanan Kami
-              </h3>
-
-              <div className="space-y-2 relative z-10">
-                {[
-                  {
-                    icon: "❄️",
-                    title: "Sewa AC & Blower",
-                    desc: "Unit dingin maksimal untuk event indoor maupun outdoor.",
-                  },
-                  {
-                    icon: "⚙️",
-                    title: "Perawatan Rutin",
-                    desc: "Semua unit dicek & dibersihkan sebelum pengiriman.",
-                  },
-                  {
-                    icon: "⚡",
-                    title: "Instalasi Aman",
-                    desc: "Pemasangan rapi, aman, dan sesuai standar teknis.",
-                  },
-                  {
-                    icon: "🛠️",
-                    title: "Teknisi Standby",
-                    desc: "Monitoring selama acara untuk memastikan performa optimal.",
-                  },
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-4 p-4 rounded-2xl bg-white/70 border border-white/60 
-        shadow-sm hover:shadow-lg hover:bg-white/80 transition-all duration-300
-        hover:-translate-y-[2px]"
-                  >
-                    <div className="text-3xl">{item.icon}</div>
-
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm">
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-0.5 leading-tight">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <button
-                onClick={openWhatsApp}
-                className="mt-7 w-full py-3 rounded-xl font-semibold
-      bg-indigo-600 text-white shadow-lg
-      hover:bg-indigo-700 transition-all duration-300 
-      hover:shadow-indigo-300/20 hover:-translate-y-[2px]
-      relative z-10"
-              >
-                Konsultasi Gratis
-              </button>
-            </div>
-
-            {/* NEW CONTENT – BENEFIT / WHY US (PREMIUM UI) */}
-            {/* <div className="p-6 bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl shadow-lg">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Kenapa Memilih Kami?
-              </h3>
-
-              <div className="space-y-4">
-                {[
-                  {
-                    icon: "⚡",
-                    title: "Respon Cepat",
-                    desc: "Admin fast response dan teknisi standby 24/7.",
-                  },
-                  {
-                    icon: "🧼",
-                    title: "Unit Bersih & Terawat",
-                    desc: "Selalu dilakukan perawatan rutin sebelum dikirim.",
-                  },
-                  {
-                    icon: "📦",
-                    title: "Pengiriman Tepat Waktu",
-                    desc: "Tim logistik terlatih & selalu on schedule.",
-                  },
-                  {
-                    icon: "💳",
-                    title: "Harga Fleksibel",
-                    desc: "Diskon khusus untuk event besar & repeat order.",
-                  },
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-3 items-start p-3 rounded-xl hover:bg-white/80 transition"
-                  >
-                    <div className="text-xl">{item.icon}</div>
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-0.5 leading-snug">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div> */}
-          </div>
-
-          {/* GALLERY */}
-          <div className="md:col-span-2 space-y-6">
-            {/* TITLE */}
-            <div className="p-6 bg-white/60 backdrop-blur-lg border border-white/40 rounded-2xl shadow">
-              <h3 className="text-xl font-bold text-gray-800">
-                Preview Perlengkapan
-              </h3>
-              <p className="text-gray-500 text-sm mt-1">
-                Lihat beberapa contoh unit yang sering digunakan untuk event dan
-                wedding.
-              </p>
-            </div>
-
-            {/* GALLERY GRID */}
-            <div className="p-6 bg-white/70 backdrop-blur border border-white/30 rounded-2xl shadow">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
-                {photos.map((src, i) => (
-                  <div
-                    key={i}
-                    className="group cursor-pointer rounded-xl overflow-hidden shadow-md hover:shadow-xl transition"
-                    onClick={() => openLightbox(i)}
-                  >
-                    <div className="relative h-40 sm:h-44">
-                      <img
-                        src={src}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition" />
-                    </div>
-
-                    <div className="p-2 bg-white/80 backdrop-blur text-center text-xs text-gray-600 border-t border-white/40">
-                      Klik untuk melihat detail
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* TESTIMONIAL CARD */}
-            <div className="p-6 bg-white/70 backdrop-blur border border-white/30 rounded-2xl shadow flex flex-col">
-              <h4 className="text-base font-semibold text-gray-800 mb-2">
-                Ulasan Pelanggan
-              </h4>
-
-              <p className="italic text-gray-700 text-sm">
-                “{testimonials[testIndex].text}”
-              </p>
-              <p className="text-xs text-gray-500 mt-2">
-                — {testimonials[testIndex].name}
-              </p>
-
-              <div className="flex gap-2 mt-4">
-                {testimonials.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setTestIndex(i)}
-                    className={`w-2.5 h-2.5 rounded-full transition ${
-                      i === testIndex ? "bg-indigo-600" : "bg-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
       {/* ================= LIGHTBOX ================= */}
       {lightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+          }}
+        >
           <button
             onClick={closeLightbox}
-            className="absolute top-6 right-6 text-white text-3xl"
+            className="absolute top-6 right-6 text-white text-3xl bg-white/6 rounded-full w-10 h-10 flex items-center justify-center border border-white/10"
+            aria-label="Tutup"
           >
             &times;
           </button>
+
           <button
             onClick={prevLightbox}
-            className="absolute left-6 text-white text-3xl"
+            className="absolute left-4 sm:left-6 text-white text-2xl bg-white/6 rounded-full w-10 h-10 flex items-center justify-center border border-white/10"
+            aria-label="Sebelumnya"
           >
             &#10094;
           </button>
 
-          <div className="max-w-3xl max-h-[80vh]">
+          <div className="max-w-4xl max-h-[86vh] w-full">
             <img
               src={photos[lightboxIndex]}
-              className="w-full h-auto rounded-xl shadow-xl"
+              alt={`Foto ${lightboxIndex + 1}`}
+              className="w-full h-auto rounded-xl shadow-xl object-contain"
+              loading="lazy"
             />
             <p className="text-white text-center mt-3 text-sm">
               Foto {lightboxIndex + 1} / {photos.length}
@@ -384,7 +315,8 @@ export default function HeroSection() {
 
           <button
             onClick={nextLightbox}
-            className="absolute right-6 text-white text-3xl"
+            className="absolute right-4 sm:right-6 text-white text-2xl bg-white/6 rounded-full w-10 h-10 flex items-center justify-center border border-white/10"
+            aria-label="Selanjutnya"
           >
             &#10095;
           </button>
