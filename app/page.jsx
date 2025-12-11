@@ -108,7 +108,7 @@ export default function Page() {
         variants={containerVariant}
       >
         {/* Hero */}
-        <motion.div variants={sectionVariant} className="relative">
+        <motion.div variants={sectionVariant} className="relative mt-5">
           <HeroSection
             query={query}
             setQuery={setQuery}
