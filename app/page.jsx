@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useState, useMemo, useEffect } from "react";
+import { motion } from "framer-motion";
 import { SAMPLE_PRODUCTS } from "../data/products";
 
 import HeaderHome from "./components/HeaderHome";
@@ -22,8 +22,17 @@ export default function Page() {
   const [category, setCategory] = useState("all");
   const [maxPrice, setMaxPrice] = useState(100000000);
   const [selected, setSelected] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [cart, setCart] = useState([]);
+
+  // Detect mobile / small screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const categories = [
     "all",
@@ -66,7 +75,7 @@ export default function Page() {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.15, // lebih cepat supaya ringan
+        staggerChildren: 0.15,
       },
     },
   };
@@ -93,15 +102,13 @@ export default function Page() {
       <motion.main
         className="pt-[72px] space-y-12"
         initial="hidden"
-        whileInView="visible"
+        animate={isMobile ? "visible" : undefined} // langsung show di mobile
+        whileInView={isMobile ? undefined : "visible"} // animasi scroll untuk desktop
         viewport={{ once: true, amount: 0.1 }}
         variants={containerVariant}
       >
         {/* Hero */}
-        <motion.div
-          variants={sectionVariant}
-          className="relative"
-        >
+        <motion.div variants={sectionVariant} className="relative">
           <HeroSection
             query={query}
             setQuery={setQuery}
@@ -143,15 +150,12 @@ export default function Page() {
           <AboutSection />
         </motion.div>
 
-        {/* Testimoni (tanpa 3D untuk HP) */}
-        <motion.div
-          variants={sectionVariant}
-          className="relative"
-        >
+        {/* Testimoni */}
+        <motion.div variants={sectionVariant} className="relative">
           <Testimoni />
         </motion.div>
 
-        {/* Contact */}
+        {/* Contact Section */}
         <motion.div variants={sectionVariant}>
           <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />
         </motion.div>

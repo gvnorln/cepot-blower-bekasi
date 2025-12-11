@@ -45,11 +45,11 @@ Pesan: ${message}
     <section
       id="contact"
       className="
-    px-4 sm:px-6 lg:px-12 py-10
-    bg-linear-to-br from-[#faf7f2] via-[#ffffff] to-[#f3efe7]
-    rounded-3xl shadow-[0_0_25px_rgba(0,0,0,0.06)]
-    border border-[#e9e2d4]/60
-    "
+        px-4 sm:px-6 lg:px-12 py-10
+        bg-linear-to-br from-[#faf7f2] via-[#ffffff] to-[#f3efe7]
+        rounded-3xl shadow-[0_0_25px_rgba(0,0,0,0.06)]
+        border border-[#e9e2d4]/60
+      "
     >
       <div className="max-w-[1750px] mx-auto px-4 sm:px-8 lg:px-14">
         <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center">
@@ -60,9 +60,10 @@ Pesan: ${message}
           profesional.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-12 mt-5">
+        {/* Responsive grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-8">
           {/* Left */}
-          <div className="p-10 rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col gap-8">
+          <div className="p-6 md:p-10 rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col gap-6 md:gap-8">
             <div>
               <h4 className="text-xl font-semibold text-gray-900 tracking-tight">
                 Informasi Kontak
@@ -73,7 +74,7 @@ Pesan: ${message}
             </div>
 
             <div>
-              <h5 className="text-sm font-semibold text-gray-700 mb-3">
+              <h5 className="text-sm font-semibold text-gray-700 mb-2">
                 Sosial Media
               </h5>
               <div className="flex flex-col gap-2">
@@ -83,7 +84,7 @@ Pesan: ${message}
                     href={s.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-gray-700 hover:text-indigo-600 transition text-sm"
+                    className="flex flex-wrap items-center gap-2 md:gap-3 text-gray-700 hover:text-indigo-600 transition text-sm"
                   >
                     <span className="text-lg">{s.icon}</span>
                     <span className="font-medium">{s.name}</span>
@@ -93,7 +94,7 @@ Pesan: ${message}
               </div>
             </div>
 
-            <div className="text-sm text-gray-600 space-y-1 pt-2">
+            <div className="text-sm text-gray-600 space-y-1 pt-1">
               <p>
                 🌐 Website:{" "}
                 <a
@@ -112,7 +113,7 @@ Pesan: ${message}
           </div>
 
           {/* Right */}
-          <div className="p-10 rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col gap-6">
+          <div className="p-6 md:p-10 rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col gap-4 md:gap-6">
             <h4 className="text-xl font-semibold text-gray-900 tracking-tight">
               Kirim Pesan Cepat
             </h4>
@@ -120,28 +121,28 @@ Pesan: ${message}
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border border-gray-300 px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-400 bg-white/80 backdrop-blur-sm focus:outline-none text-sm transition"
+              className="border border-gray-300 px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-400 bg-white/80 backdrop-blur-sm focus:outline-none text-sm w-full transition"
               placeholder="Nama Anda"
             />
 
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="border border-gray-300 px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-400 bg-white/80 backdrop-blur-sm resize-none text-sm transition"
+              className="border border-gray-300 px-4 py-3 rounded-xl focus:ring-2 focus:ring-indigo-400 bg-white/80 backdrop-blur-sm resize-none text-sm w-full transition"
               rows={5}
               placeholder="Pesan Anda..."
             />
 
             <button
               onClick={handleWhatsApp}
-              className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-[0_10px_25px_rgba(79,70,229,0.25)] transition text-sm"
+              className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-[0_10px_25px_rgba(79,70,229,0.25)] transition text-sm"
             >
               Kirim Pesan via WhatsApp
             </button>
           </div>
         </div>
 
-        <div className="mt-20 border-t border-gray-300/50 pt-6 text-center text-gray-500 text-xs tracking-wide">
+        <div className="mt-12 md:mt-20 border-t border-gray-300/50 pt-6 text-center text-gray-500 text-xs tracking-wide">
           &copy; {new Date().getFullYear()} Cepot Blower Bekasi. All rights
           reserved.
         </div>
