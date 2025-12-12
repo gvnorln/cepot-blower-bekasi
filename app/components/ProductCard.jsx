@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 export default function ProductCard({ p, addToCart }) {
   const [qty, setQty] = useState(0);
@@ -20,7 +22,13 @@ export default function ProductCard({ p, addToCart }) {
 
   const handleAddToCart = () => {
     if (qty < selectedVariant.minOrder) {
-      alert(`Minimal order untuk produk ini adalah ${selectedVariant.minOrder}`);
+      Swal.fire({
+        icon: "warning",
+        title: "Minimal Order!",
+        text: `Minimal order untuk produk ini adalah ${selectedVariant.minOrder} pcs`,
+        confirmButtonColor: "#6366f1",
+        confirmButtonText: "Oke, mengerti 👍",
+      });
       return;
     }
 
@@ -28,6 +36,15 @@ export default function ProductCard({ p, addToCart }) {
       ...p,
       qty,
       selectedVariant,
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil Ditambahkan!",
+      text: `${p.title} telah ditambahkan ke keranjang.`,
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
     });
 
     setQty(0);
@@ -42,17 +59,12 @@ export default function ProductCard({ p, addToCart }) {
     ? pricePerUnit.toLocaleString("id-ID")
     : "0";
 
-  // FINAL SPECS SOURCE:
-  // Priority: Variant specs → product specs → empty array
   const specsList = selectedVariant.specs || p.specs || [];
 
   return (
     <>
-      {/* --------------------------------------------------------------
-          PRODUCT CARD
-      -------------------------------------------------------------- */}
+      {/* PRODUCT CARD */}
       <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition hover:shadow-lg hover:-translate-y-1 duration-300 font-sans">
-        
         {/* Product Image */}
         <div className="w-full overflow-hidden rounded-t-2xl">
           <img
@@ -64,8 +76,7 @@ export default function ProductCard({ p, addToCart }) {
 
         {/* Product Body */}
         <div className="p-4 flex flex-col gap-3">
-
-          {/* Title + Short Desc */}
+          {/* Title */}
           <div>
             <h4 className="text-gray-900 font-semibold text-base md:text-lg line-clamp-2">
               {p.title}
@@ -76,26 +87,24 @@ export default function ProductCard({ p, addToCart }) {
           </div>
 
           {/* Variant Selector */}
-          <div className="flex flex-col gap-1">
-            <select
-              value={selectedVariant.name}
-              onChange={(e) =>
-                setSelectedVariant(
-                  p.variants.find((v) => v.name === e.target.value)
-                )
-              }
-              className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            >
-              {p.variants.map((v) => (
-                <option key={v.name} value={v.name}>
-                  {v.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={selectedVariant.name}
+            onChange={(e) =>
+              setSelectedVariant(
+                p.variants.find((v) => v.name === e.target.value)
+              )
+            }
+            className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          >
+            {p.variants.map((v) => (
+              <option key={v.name} value={v.name}>
+                {v.name}
+              </option>
+            ))}
+          </select>
 
-          {/* Price Display */}
-          <div className="flex flex-col gap-1 mt-2">
+          {/* Price */}
+          <div className="flex flex-col mt-1">
             <div className="text-indigo-600 font-bold text-lg md:text-xl">
               Rp {priceDisplay} / pcs
             </div>
@@ -105,8 +114,7 @@ export default function ProductCard({ p, addToCart }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
-
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-3">
             {/* Detail Button */}
             <button
               onClick={() => setShowModal(true)}
@@ -150,15 +158,10 @@ export default function ProductCard({ p, addToCart }) {
         </div>
       </article>
 
-      {/* --------------------------------------------------------------
-          MODAL DETAIL
-      -------------------------------------------------------------- */}
+      {/* MODAL DETAIL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          
           <div className="bg-white p-6 rounded-2xl max-w-md w-full relative shadow-lg animate-[fadeIn_0.2s]">
-
-            {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-lg transition"
@@ -166,23 +169,19 @@ export default function ProductCard({ p, addToCart }) {
               ×
             </button>
 
-            {/* Image */}
             <img
               src={p.image}
               alt={p.title}
               className="w-full h-48 object-cover rounded-xl"
             />
 
-            {/* Title */}
             <h2 className="text-xl font-bold mt-4">{p.title}</h2>
             <p className="text-gray-600 mt-2">{p.short}</p>
 
-            {/* Variant */}
             <div className="mt-3">
               <strong>Variant:</strong> {selectedVariant.name}
             </div>
 
-            {/* Price */}
             <div className="text-indigo-600 font-bold text-lg mt-1">
               Rp {priceDisplay} / pcs
             </div>
@@ -191,7 +190,6 @@ export default function ProductCard({ p, addToCart }) {
               <strong>Minimal order:</strong> {selectedVariant.minOrder} pcs
             </div>
 
-            {/* Variant Specs / Product Specs */}
             <ul className="mt-3 list-disc list-inside text-gray-600 text-sm">
               {specsList.map((s, i) => (
                 <li key={i}>{s}</li>

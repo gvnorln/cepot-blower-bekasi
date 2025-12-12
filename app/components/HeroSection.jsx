@@ -111,45 +111,38 @@ export default function HeroSection() {
             />
           ))}
 
-          {/* Overlays & decorative glows */}
+          {/* Overlays */}
           <div className="absolute inset-0 pointer-events-none">
-            {/* Premium overlays */}
             <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/45 to-black/20" />
-
-            {/* Gold Mist Glow */}
             <div className="absolute -left-32 -top-24 w-96 h-96 rounded-full bg-[rgba(255,215,160,0.12)] blur-[110px]" />
-
-            {/* Purple Lux Glow */}
             <div className="absolute -right-40 bottom-0 w-[420px] h-[420px] rounded-full bg-[rgba(160,140,255,0.14)] blur-[140px]" />
-
-            {/* Soft bottom fog */}
             <div className="absolute bottom-0 left-0 right-0 h-40 bg-linear-to-t from-black/40 to-transparent" />
           </div>
         </div>
 
-        {/* Content area (responsive height: medium on mobile, larger on desktop) */}
+        {/* Content */}
         <div className="relative z-20 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-16 py-6 sm:py-8 lg:py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* LEFT: headline, copy, CTA, metrics */}
+            {/* LEFT */}
             <div className="flex flex-col gap-4 md:gap-5">
               <div
                 className="
-              inline-block rounded-full
-              bg-white/5 backdrop-blur-xl border border-white/20
-              px-3 py-1 text-[11px] sm:text-xs text-white/95 w-fit
-              shadow-[0_0_12px_rgba(255,255,255,0.08)]
-  "
+                  inline-block rounded-full
+                  bg-white/5 backdrop-blur-xl border border-white/20
+                  px-3 py-1 text-[11px] sm:text-xs text-white/95 w-fit
+                  shadow-[0_0_12px_rgba(255,255,255,0.08)]
+                "
               >
                 Penyewaan Perlengkapan Event
               </div>
 
               <h1
                 className="
-                text-transparent bg-clip-text
-                bg-linear-to-r from-[#f6e7d4] via-white to-[#dcc7a1]
-                text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold
-                leading-snug drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]
-              "
+                  text-transparent bg-clip-text
+                  bg-linear-to-r from-[#f6e7d4] via-white to-[#dcc7a1]
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold
+                  leading-snug drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]
+                "
               >
                 Sewa AC, Blower, Lighting & Sound untuk Acara Profesional
               </h1>
@@ -163,12 +156,12 @@ export default function HeroSection() {
                 <button
                   onClick={openWhatsApp}
                   className="
-                  rounded-full px-5 py-2.5 sm:px-6 sm:py-3 font-semibold text-gray-900
-                  bg-linear-to-r from-[#f5e6d3] to-[#e8d5b5]
-                  shadow-[0_8px_22px_rgba(0,0,0,0.25)]
-                  hover:shadow-[0_12px_28px_rgba(0,0,0,0.35)]
-                  hover:scale-[1.03] transition
-                "
+                    rounded-full px-5 py-2.5 sm:px-6 sm:py-3 font-semibold text-gray-900
+                    bg-linear-to-r from-[#f5e6d3] to-[#e8d5b5]
+                    shadow-[0_8px_22px_rgba(0,0,0,0.25)]
+                    hover:shadow-[0_12px_28px_rgba(0,0,0,0.35)]
+                    hover:scale-[1.03] transition
+                  "
                 >
                   Konsultasi Gratis
                 </button>
@@ -181,7 +174,7 @@ export default function HeroSection() {
                 </a>
               </div>
 
-              {/* Metrics - show on md+ */}
+              {/* Metrics */}
               <div className="hidden md:flex gap-3 mt-4">
                 {[
                   { label: "Acara", value: "1200+" },
@@ -199,21 +192,38 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* RIGHT: gallery card (auto columns) */}
+            {/* RIGHT — Preview Perlengkapan */}
             <div className="relative">
               <div className="rounded-3xl overflow-hidden bg-white/6 backdrop-blur border border-white/8 shadow-xl p-3 sm:p-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                
+                {/* MOBILE: horizontal carousel */}
+                <div className="sm:hidden flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-none py-1">
                   {photos.map((src, i) => (
                     <button
                       key={i}
                       onClick={() => openLightbox(i)}
-                      className="group relative rounded-xl overflow-hidden w-full h-40 sm:h-36 md:h-28 lg:h-32"
-                      aria-label={`Buka foto ${i + 1}`}
+                      className="snap-center flex-shrink-0 relative rounded-2xl overflow-hidden w-40 h-40"
                     >
                       <img
                         src={src}
                         alt={`Equipment ${i + 1}`}
-                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                {/* DESKTOP: grid */}
+                <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                  {photos.map((src, i) => (
+                    <button
+                      key={i}
+                      onClick={() => openLightbox(i)}
+                      className="group relative rounded-xl overflow-hidden w-full h-36 md:h-28 lg:h-32"
+                    >
+                      <img
+                        src={src}
+                        alt={`Equipment ${i + 1}`}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition" />
@@ -255,7 +265,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* BOTTOM METRICS MOBILE (visible on small screens) */}
+        {/* Metrics mobile */}
         <div className="md:hidden px-4 sm:px-6 pb-6 z-10 relative">
           <div className="flex gap-3 justify-center">
             {[

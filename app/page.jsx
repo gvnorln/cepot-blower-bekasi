@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SAMPLE_PRODUCTS } from "../data/products";
 
 import HeaderHome from "./components/HeaderHome";
@@ -11,6 +11,7 @@ import ProductModal from "./components/ProductModal";
 import AboutSection from "./components/AboutSection";
 import Testimoni from "./components/Testimoni";
 import GalleryGrid from "./components/GalleryGrid";
+import FAQSection from "./components/FAQSection";
 import ContactSection from "./components/ContactSection";
 import FloatingCart from "./components/FloatingCart";
 import FloatingWA from "./components/FloatingWA";
@@ -26,12 +27,26 @@ export default function Page() {
 
   const [cart, setCart] = useState([]);
 
-  // Detect mobile / small screen
+  // Reduce motion for accessibility & smoother performance on low-end devices
+  const prefersReduced = useReducedMotion();
+
+  // Detect mobile / small screen (debounced for better smoothness)
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const update = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 640);
+    };
+
+    update();
+
+    let timeout;
+    const onResize = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(update, 120); // Debounce 120ms
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   const categories = [
@@ -46,7 +61,8 @@ export default function Page() {
       if (p.price > maxPrice) return false;
       if (!q) return true;
       return (
-        p.title.toLowerCase().includes(q) || p.short.toLowerCase().includes(q)
+        p.title.toLowerCase().includes(q) ||
+        p.short.toLowerCase().includes(q)
       );
     });
   }, [query, category, maxPrice]);
@@ -70,27 +86,41 @@ export default function Page() {
     });
   };
 
-  // Variants untuk animasi ringan & responsive
-  const containerVariant = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
+  // Reworked animation variants (smooth, GPU-accelerated)
+  const containerVariant = prefersReduced
+    ? {}
+    : {
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: 0.12,
+            ease: "easeOut",
+          },
+        },
+      };
 
-  const sectionVariant = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
+  const sectionVariant = prefersReduced
+    ? {}
+    : {
+        hidden: {
+          opacity: 0,
+          y: 20,
+          transform: "translate3d(0,20px,0)",
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transform: "translate3d(0,0,0)",
+          transition: {
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1], // smoother cubic bezier
+          },
+        },
+      };
 
   return (
     <div className="px-4 sm:px-4 relative bg-linear-to-b from-[#fcfaf5] via-[#f9f6ee] to-[#f3ede3]">
+
       <FloatingCart
         cart={cart}
         setCart={setCart}
@@ -102,9 +132,8 @@ export default function Page() {
       <motion.main
         className="pt-[72px] space-y-12"
         initial="hidden"
-        animate={isMobile ? "visible" : undefined} // langsung show di mobile
-        whileInView={isMobile ? undefined : "visible"} // animasi scroll untuk desktop
-        viewport={{ once: true, amount: 0.1 }}
+        animate="visible"
+        viewport={{ once: true, amount: 0.15 }}
         variants={containerVariant}
       >
         {/* Hero */}
@@ -130,7 +159,7 @@ export default function Page() {
           />
         </motion.div>
 
-        {/* Product Modal */}
+        {/* Modal */}
         {selected && (
           <ProductModal
             product={selected}
@@ -145,7 +174,7 @@ export default function Page() {
           <GalleryGrid />
         </motion.div>
 
-        {/* About Section */}
+        {/* About */}
         <motion.div variants={sectionVariant}>
           <AboutSection />
         </motion.div>
@@ -154,8 +183,12 @@ export default function Page() {
         <motion.div variants={sectionVariant} className="relative">
           <Testimoni />
         </motion.div>
+        {/* Testimoni */}
+        <motion.div variants={sectionVariant} className="relative">
+          <FAQSection />
+        </motion.div>
 
-        {/* Contact Section */}
+        {/* Contact */}
         <motion.div variants={sectionVariant}>
           <ContactSection WHATSAPP_PHONE={WHATSAPP_PHONE} />
         </motion.div>
