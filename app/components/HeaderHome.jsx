@@ -13,6 +13,7 @@ export default function Header({ WHATSAPP_PHONE }) {
     { name: "Galeri", href: "#gallery", isRoute: true },
     { name: "Tentang", href: "#about" },
     { name: "Testimoni", href: "#testimoni" },
+    { name: "FAQ", href: "#faq" },
     { name: "Kontak", href: "#contact" },
   ];
 
